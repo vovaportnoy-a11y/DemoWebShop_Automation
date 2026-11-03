@@ -2,6 +2,7 @@ import os
 import pytest
 from dotenv import load_dotenv
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -12,14 +13,15 @@ USER_EMAIL = os.getenv("USER_EMAIL")
 USER_PASSWORD = os.getenv("USER_PASSWORD")
 
 
+
 @pytest.fixture
 def driver():
-    browser = webdriver.Chrome()
-    browser.maximize_window()
-    browser.implicitly_wait(10)
+    options = Options()
+    options.add_argument("--start-maximized")  # Открывает сразу во весь экран без бага Runtime.evaluate
+
+    browser = webdriver.Chrome(options=options)
     yield browser
     browser.quit()
-
 
 class TestLogin:
 
